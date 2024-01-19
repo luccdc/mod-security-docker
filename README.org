@@ -1,0 +1,7 @@
+#+title: Readme
+
+Contains the ~owasp/modsecurity-crs:nginx~ container
+
+To load it, use `docker load image.tgz`
+
+Documentation for how to use it can be found [[https://github.com/coreruleset/modsecurity-crs-docker][here]]

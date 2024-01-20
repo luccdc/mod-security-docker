@@ -1,3 +1,4 @@
+# local
 notepad tmp | out-null 
 add-type -AssemblyName system.web 
 glu | ?{$_.name -notin (gc tmp.txt)} | %{
@@ -6,3 +7,17 @@ glu | ?{$_.name -notin (gc tmp.txt)} | %{
     $pass = $Null
 }
 del tmp.txt
+
+# domain
+<#
+$domain = $(Get-ADDomain | Select -ExpandProperty NetBIOSName)
+Add-Type -AssemblyName System.Web
+Get-ADUser -Filter * | ?{$_.name -notin (gc tmp.txt)} | %{
+    $user = $_.SAMAccountName
+    $pass = [System.Web.Security.Membership]::GeneratePassword(17,2)
+    $pass = $pass.replace(',','!')
+    $pass = $pass.replace(';','?')
+    Set-ADAccountPassword -Identity $_.SAMAccountName -Reset -NewPassword (ConvertTo-SecureString -AsPlainText $pass -Force) 
+    $pass = $Null
+}
+#>

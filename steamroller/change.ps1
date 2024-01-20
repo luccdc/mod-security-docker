@@ -10,6 +10,7 @@ del tmp.txt
 
 # domain
 <#
+notepad tmp | out-null
 $domain = $(Get-ADDomain | Select -ExpandProperty NetBIOSName)
 Add-Type -AssemblyName System.Web
 Get-ADUser -Filter * | ?{$_.name -notin (gc tmp.txt)} | %{
@@ -20,4 +21,5 @@ Get-ADUser -Filter * | ?{$_.name -notin (gc tmp.txt)} | %{
     Set-ADAccountPassword -Identity $_.SAMAccountName -Reset -NewPassword (ConvertTo-SecureString -AsPlainText $pass -Force) 
     $pass = $Null
 }
+del tmp.txt
 #>
